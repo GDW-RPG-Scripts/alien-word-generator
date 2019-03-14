@@ -30,7 +30,7 @@
 
 int main(int argc, char* argv[])
 {
-  // Q_INIT_RESOURCE(AlienWordGenerator);
+  Q_INIT_RESOURCE(workspace);
 
   QApplication application(argc, argv);
 

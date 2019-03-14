@@ -25,18 +25,18 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
-        main.cc \
-        workspace.cc \
+    main.cc \
+    workspace.cc \
     letter.cc \
     language.cc \
     preferences.cc
 
 HEADERS += \
-        workspace.hh \
+    workspace.hh \
     preferences.hh
 
 FORMS += \
-        workspace.ui
+    workspace.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
