@@ -155,14 +155,17 @@ namespace GDW
     QString
     Workspace::Generate()
     {
-      qDebug() << "Strict: " << mStrictGeneration;
       QString result;
-      SyllableType type = BASIC;
+      SyllableType type = Basic;
       int syllables = mStrictGeneration ?
                         rand() % 6 + 1 :
                         rand() % 2 + rand() % 2 + 2;
       for (int i = 0; i < syllables; ++i) {
-        type = LANGUAGE[mLanguage][type][rand() % 36](*this, result);
+        int character = rand() % NO_SYLLABLES;
+        type = LANGUAGE[mLanguage][type][character](*this, result);
+        qDebug() << "Gen:" << character
+                 << ":" << result
+                 << ", Next:" << type;
       }
       return result;
     }
@@ -174,28 +177,30 @@ namespace GDW
       QVariant data = mUi.listWidget->model()->data(index);
       QClipboard* clipboard = QGuiApplication::clipboard();
       clipboard->setText(data.toString());
-      qDebug() << "Copied: " << data;
     }
 
     void
     Workspace::ItemSelected(int item)
     {
       mUi.actionCopy->setEnabled(true);
-      qDebug() << "Item selected: " << item;
     }
 
     int
     Workspace::Index()
     {
-      return rand() % 216;
+      return rand() % NO_LETTERS;
     }
 
     SyllableType
     Workspace::V(QString& result)
     {
       result += LETTER[mLanguage][Vowel][Index()];
-      return SyllableType(mLanguage == Vargr ||
-                          mLanguage == Vilani);
+      return mLanguage == Kkree ?
+            After_V :
+            mLanguage == Vargr ||
+            mLanguage == Vilani ?
+              Alternate :
+              Basic;
     }
 
     SyllableType
@@ -203,8 +208,12 @@ namespace GDW
     {
       result += LETTER[mLanguage][Initial][Index()];
       V(result);
-      return SyllableType(mLanguage == Vargr ||
-                          mLanguage == Vilani);
+      return mLanguage == Kkree ?
+            After_V :
+            mLanguage == Vargr ||
+            mLanguage == Vilani ?
+              Alternate :
+              Basic;
     }
 
     SyllableType
@@ -212,11 +221,15 @@ namespace GDW
     {
       V(result);
       result += LETTER[mLanguage][Final][Index()];
-      return SyllableType(mLanguage == Aslan ||
-                          mLanguage == Darrian ||
-                          mLanguage == Droyne ||
-                          mLanguage == Vilani ||
-                          mLanguage == Zhodani);
+      return mLanguage == Kkree ?
+            After_C :
+            mLanguage == Aslan ||
+            mLanguage == Darrian ||
+            mLanguage == Droyne ||
+            mLanguage == Vilani ||
+            mLanguage == Zhodani ?
+              Alternate :
+              Basic;
     }
 
     SyllableType
@@ -224,11 +237,15 @@ namespace GDW
     {
       CV(result);
       result += LETTER[mLanguage][Final][Index()];
-      return SyllableType(mLanguage == Aslan ||
-                          mLanguage == Darrian ||
-                          mLanguage == Droyne ||
-                          mLanguage == Vilani ||
-                          mLanguage == Zhodani);
+      return mLanguage == Kkree ?
+            After_C :
+            mLanguage == Aslan ||
+            mLanguage == Darrian ||
+            mLanguage == Droyne ||
+            mLanguage == Vilani ||
+            mLanguage == Zhodani ?
+              Alternate :
+              Basic;
     }
   };
 };

@@ -26,7 +26,7 @@ namespace GDW
 {
   namespace RPG
   {
-    const SyllableGenerator Workspace::LANGUAGE[6][2][36] =
+    const SyllableGenerator Workspace::LANGUAGE[MAX_LANGS][MAX_LETTERS][36] =
     {
       // Aslan
       {{
@@ -43,6 +43,8 @@ namespace GDW
          &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,
          &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,
          &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC
+       },{
+         // n/a
        }},
       // Darrian
       {{
@@ -59,6 +61,8 @@ namespace GDW
          &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,
          &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::V,   &Workspace::V,   &Workspace::V,
          &Workspace::V,   &Workspace::V,   &Workspace::V,   &Workspace::V,   &Workspace::V,   &Workspace::V
+       },{
+         // n/a
        }},
       // Droyne
       {{
@@ -73,6 +77,31 @@ namespace GDW
          &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,
          &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,
          &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC,
+         &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC,
+         &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC
+       },{
+         // n/a
+       }},
+      // K'kree
+      {{
+         &Workspace::V,   &Workspace::V,   &Workspace::V,   &Workspace::CV,  &Workspace::CV,  &Workspace::CV,
+         &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,
+         &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,
+         &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,
+         &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC,
+         &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC
+       },{
+         &Workspace::V,   &Workspace::V,   &Workspace::V,   &Workspace::V,   &Workspace::V,   &Workspace::V,
+         &Workspace::V,   &Workspace::V,   &Workspace::V,   &Workspace::V,   &Workspace::V,   &Workspace::V,
+         &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,
+         &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,
+         &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,
+         &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC
+       },{
+         &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,
+         &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,
+         &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,
+         &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,
          &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC,
          &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC
        }},
@@ -91,6 +120,8 @@ namespace GDW
          &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC,
          &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC,
          &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC
+       },{
+         // n/a
        }},
       // Vilani
       {{
@@ -107,6 +138,8 @@ namespace GDW
          &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CVC, &Workspace::CVC, &Workspace::CVC,
          &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC,
          &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC
+       },{
+         // n/a
        }},
       // Zhodani
       {{
@@ -123,6 +156,8 @@ namespace GDW
          &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC,
          &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC,
          &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC
+       },{
+         // n/a
        }}
     };
   };

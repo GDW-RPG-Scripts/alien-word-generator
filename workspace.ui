@@ -53,17 +53,22 @@
         </item>
         <item>
          <property name="text">
-          <string>Darrian</string>
+          <string>Darrian (Tezapet)</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string notr="true">Droyne</string>
+          <string notr="true">Droyne (Oynprith)</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string notr="true">Vargr</string>
+          <string>K'kree</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string notr="true">Vargr (Gvegh)</string>
          </property>
         </item>
         <item>

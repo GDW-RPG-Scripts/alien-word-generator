@@ -42,22 +42,33 @@ namespace GDW
       Aslan,
       Darrian,
       Droyne,
+      Kkree,
       Vargr,
       Vilani,
-      Zhodani
+      Zhodani,
+      MAX_LANGS
     };
 
     enum Letter
     {
       Initial,
       Vowel,
-      Final
+      Final,
+      MAX_LETTERS
     };
 
     enum SyllableType
     {
-      BASIC,
-      ALTERNATE
+      Basic,
+      Alternate,
+      After_C = Alternate,
+      After_V
+    };
+
+    enum Limits
+    {
+      NO_SYLLABLES = 36,
+      NO_LETTERS = 216
     };
 
     typedef std::function<SyllableType(Workspace&,QString&)> SyllableGenerator;
@@ -104,8 +115,8 @@ namespace GDW
         Language mLanguage;
         Ui::Workspace mUi;
 
-        static const char* LETTER[6][3][216];
-        static const SyllableGenerator LANGUAGE[6][2][36];
+        static const char* LETTER[MAX_LANGS][MAX_LETTERS][NO_LETTERS];
+        static const SyllableGenerator LANGUAGE[MAX_LANGS][MAX_LETTERS][NO_SYLLABLES];
     };
   };
 };
