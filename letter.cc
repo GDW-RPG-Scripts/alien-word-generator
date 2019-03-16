@@ -20,14 +20,14 @@
  * Generator. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "workspace.hh"
+#include "language.hh"
 
 namespace GDW
 {
   namespace RPG
   {
     const char*
-    Workspace::LETTER[MAX_LANGS][MAX_LETTERS][216] =
+    Language::LETTER[LANGUAGE_TYPES][LETTER_TYPES][LETTERS] =
     {
       // Aslan
       {{

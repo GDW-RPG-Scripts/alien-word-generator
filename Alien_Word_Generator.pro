@@ -28,12 +28,14 @@ SOURCES += \
     main.cc \
     workspace.cc \
     letter.cc \
-    language.cc \
-    preferences.cc
+    preferences.cc \
+    syllable.cc \
+    language.cc
 
 HEADERS += \
     workspace.hh \
-    preferences.hh
+    preferences.hh \
+    language.hh
 
 FORMS += \
     workspace.ui
@@ -44,4 +46,4 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 RESOURCES += \
-    workspace.qrc
+    AlienWordGenerator.qrc

@@ -14,7 +14,7 @@
    <string>Alien Word Generator</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="workspace.qrc">
+   <iconset resource="AlienWordGenerator.qrc">
     <normaloff>:/icons/sunburst.png</normaloff>:/icons/sunburst.png</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
@@ -244,7 +244,7 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
-  <include location="workspace.qrc"/>
+  <include location="AlienWordGenerator.qrc"/>
  </resources>
  <connections>
   <connection>

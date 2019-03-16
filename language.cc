@@ -20,145 +20,101 @@
  * Generator. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "workspace.hh"
+#include "language.hh"
 
 namespace GDW
 {
   namespace RPG
   {
-    const SyllableGenerator Workspace::LANGUAGE[MAX_LANGS][MAX_LETTERS][36] =
+    Language::Language(LanguageType language, bool strict)
+      : mStrict(strict), mLanguage(language)
+    {}
+
+    int
+    Language::Syllable()
     {
-      // Aslan
-      {{
-         &Workspace::V,   &Workspace::V,   &Workspace::V,   &Workspace::V,   &Workspace::V,   &Workspace::V,
-         &Workspace::V,   &Workspace::V,   &Workspace::V,   &Workspace::V,   &Workspace::V,   &Workspace::V,
-         &Workspace::V,   &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,
-         &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::VC,  &Workspace::VC,
-         &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,
-         &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC
-       },{
-         &Workspace::V,   &Workspace::V,   &Workspace::V,   &Workspace::V,   &Workspace::V,   &Workspace::V,
-         &Workspace::V,   &Workspace::V,   &Workspace::V,   &Workspace::V,   &Workspace::V,   &Workspace::V,
-         &Workspace::V,   &Workspace::V,   &Workspace::V,   &Workspace::VC,  &Workspace::VC,  &Workspace::VC,
-         &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,
-         &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,
-         &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC
-       },{
-         // n/a
-       }},
-      // Darrian
-      {{
-         &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC,
-         &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC,
-         &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC,
-         &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC,
-         &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CV,  &Workspace::CV,  &Workspace::CV,
-         &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV
-       },{
-         &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,
-         &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,
-         &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,
-         &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,
-         &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::V,   &Workspace::V,   &Workspace::V,
-         &Workspace::V,   &Workspace::V,   &Workspace::V,   &Workspace::V,   &Workspace::V,   &Workspace::V
-       },{
-         // n/a
-       }},
-      // Droyne
-      {{
-         &Workspace::V,   &Workspace::V,   &Workspace::V,   &Workspace::V,   &Workspace::V,   &Workspace::V,
-         &Workspace::V,   &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,
-         &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,
-         &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,
-         &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::CVC,
-         &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC
-       },{
-         &Workspace::V,   &Workspace::V,   &Workspace::V,   &Workspace::V,   &Workspace::V,   &Workspace::V,
-         &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,
-         &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,
-         &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC,
-         &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC,
-         &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC
-       },{
-         // n/a
-       }},
-      // K'kree
-      {{
-         &Workspace::V,   &Workspace::V,   &Workspace::V,   &Workspace::CV,  &Workspace::CV,  &Workspace::CV,
-         &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,
-         &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,
-         &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,
-         &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC,
-         &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC
-       },{
-         &Workspace::V,   &Workspace::V,   &Workspace::V,   &Workspace::V,   &Workspace::V,   &Workspace::V,
-         &Workspace::V,   &Workspace::V,   &Workspace::V,   &Workspace::V,   &Workspace::V,   &Workspace::V,
-         &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,
-         &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,
-         &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,
-         &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC
-       },{
-         &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,
-         &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,
-         &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,
-         &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,
-         &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC,
-         &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC
-       }},
-      // Vargr
-      {{
-         &Workspace::V,   &Workspace::V,   &Workspace::V,   &Workspace::V,   &Workspace::VC,  &Workspace::VC,
-         &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,
-         &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,
-         &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CVC, &Workspace::CVC,
-         &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC,
-         &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC
-       },{
-         &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,
-         &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,
-         &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,
-         &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC,
-         &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC,
-         &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC
-       },{
-         // n/a
-       }},
-      // Vilani
-      {{
-         &Workspace::V,   &Workspace::V,   &Workspace::V,   &Workspace::V,   &Workspace::V,   &Workspace::V,
-         &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,
-         &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,
-         &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,
-         &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::CVC,
-         &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC
-       },{
-         &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,
-         &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,
-         &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,
-         &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CVC, &Workspace::CVC, &Workspace::CVC,
-         &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC,
-         &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC
-       },{
-         // n/a
-       }},
-      // Zhodani
-      {{
-         &Workspace::V,   &Workspace::V,   &Workspace::V,   &Workspace::CV,  &Workspace::CV,  &Workspace::CV,
-         &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,
-         &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::CVC, &Workspace::CVC, &Workspace::CVC,
-         &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC,
-         &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC,
-         &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC
-       },{
-         &Workspace::V,   &Workspace::V,   &Workspace::V,   &Workspace::V,   &Workspace::V,   &Workspace::V,
-         &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,  &Workspace::CV,
-         &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,  &Workspace::VC,
-         &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC,
-         &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC,
-         &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC, &Workspace::CVC
-       },{
-         // n/a
-       }}
-    };
+      return rand() % SYLLABLES;
+    }
+
+    int
+    Language::Letter()
+    {
+      return rand() % LETTERS;
+    }
+
+    QString
+    Language::Generate()
+    {
+      QString word;
+
+      int syllables = mStrict ?
+                        rand() % 6 + 1 :
+                        rand() % 2 + rand() % 2 + 2;
+
+      SyllableType syllableType = Basic;
+      for (int i = 0; i < syllables; ++i) {
+        syllableType =
+            SYLLABLE[mLanguage][syllableType][Syllable()](*this, word);
+      }
+
+      return word;
+    }
+
+    SyllableType
+    Language::V(QString& word)
+    {
+      word += LETTER[mLanguage][Vowel][Letter()];
+      return mLanguage == Kkree ?
+            After_V :
+            mLanguage == Vargr ||
+            mLanguage == Vilani ?
+              Alternate :
+              Basic;
+    }
+
+    SyllableType
+    Language::CV(QString& word)
+    {
+      word += LETTER[mLanguage][Initial][Letter()];
+      V(word);
+      return mLanguage == Kkree ?
+            After_V :
+            mLanguage == Vargr ||
+            mLanguage == Vilani ?
+              Alternate :
+              Basic;
+    }
+
+    SyllableType
+    Language::VC(QString& word)
+    {
+      V(word);
+      word += LETTER[mLanguage][Final][Letter()];
+      return mLanguage == Kkree ?
+            After_C :
+            mLanguage == Aslan ||
+            mLanguage == Darrian ||
+            mLanguage == Droyne ||
+            mLanguage == Vilani ||
+            mLanguage == Zhodani ?
+              Alternate :
+              Basic;
+    }
+
+    SyllableType
+    Language::CVC(QString& word)
+    {
+      CV(word);
+      word += LETTER[mLanguage][Final][Letter()];
+      return mLanguage == Kkree ?
+            After_C :
+            mLanguage == Aslan ||
+            mLanguage == Darrian ||
+            mLanguage == Droyne ||
+            mLanguage == Vilani ||
+            mLanguage == Zhodani ?
+              Alternate :
+              Basic;
+    }
   };
 };

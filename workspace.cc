@@ -33,14 +33,13 @@
 
 #include <cstdlib>
 #include <ctime>
-#include <functional>
 
 namespace GDW
 {
   namespace RPG
   {
     Workspace::Workspace(QWidget *parent) :
-      QMainWindow(parent), mMaxWords(20), mStrictGeneration(false)
+      QMainWindow(parent), mStrict(false), mMaxWords(20)
     {
       ReadSettings();
 
@@ -57,7 +56,6 @@ namespace GDW
     //
     // Events
     //
-
     void Workspace::closeEvent(QCloseEvent* event)
     {
       if (true /*MaybeSave()*/) {
@@ -68,12 +66,15 @@ namespace GDW
       }
     }
 
+    //
+    // Slots
+    //
     void
     Workspace::SetLanguage(int language)
     {
       mUi.clearButton->setEnabled(true);
       mUi.generateButton->setEnabled(true);
-      mLanguage = Language(language - 1);
+      mLanguage = LanguageType(language - 1);
 
       if(mUi.listWidget->model()->rowCount() == 0)
         Fill();
@@ -108,66 +109,9 @@ namespace GDW
     }
 
     void
-    Workspace::StrictGeneration(int state)
+    Workspace::SetStrict(int state)
     {
-      mStrictGeneration = state;
-    }
-
-    void
-    Workspace::ReadSettings()
-    {
-      QSettings settings;
-
-      mStrictGeneration =
-          settings.value("strictGeneration", mStrictGeneration).toBool();
-
-      const QByteArray geometry =
-          settings.value("geometry", QByteArray()).toByteArray();
-      if (geometry.isEmpty()) {
-        const QRect availableGeometry =
-            QApplication::desktop()->availableGeometry(this);
-        resize(availableGeometry.width() / 3, availableGeometry.height() / 2);
-        move((availableGeometry.width() - width()) / 2,
-             (availableGeometry.height() - height()) / 2);
-      } else {
-        restoreGeometry(geometry);
-      }
-    }
-
-    void
-    Workspace::WriteSettings()
-    {
-      QSettings settings;
-      settings.setValue("geometry", saveGeometry());
-      settings.setValue("strictGeneration", mStrictGeneration);
-    }
-
-    void
-    Workspace::Fill()
-    {
-      for (int i = 0; i < mMaxWords; ++i) {
-        QString result = Generate();
-        result[0] = result[0].toUpper();
-        new QListWidgetItem(result, mUi.listWidget);
-      }
-    }
-
-    QString
-    Workspace::Generate()
-    {
-      QString result;
-      SyllableType type = Basic;
-      int syllables = mStrictGeneration ?
-                        rand() % 6 + 1 :
-                        rand() % 2 + rand() % 2 + 2;
-      for (int i = 0; i < syllables; ++i) {
-        int character = rand() % NO_SYLLABLES;
-        type = LANGUAGE[mLanguage][type][character](*this, result);
-        qDebug() << "Gen:" << character
-                 << ":" << result
-                 << ", Next:" << type;
-      }
-      return result;
+      mStrict = state > 0;
     }
 
     void
@@ -180,72 +124,51 @@ namespace GDW
     }
 
     void
-    Workspace::ItemSelected(int item)
+    Workspace::Fill()
+    {
+      Language word(mLanguage, mStrict);
+
+      for (int i = 0; i < mMaxWords; ++i) {
+        QString result = word.Generate();
+        result[0] = result[0].toUpper();
+        new QListWidgetItem(result, mUi.listWidget);
+      }
+    }
+
+    void
+    Workspace::ItemSelected(int)
     {
       mUi.actionCopy->setEnabled(true);
     }
 
-    int
-    Workspace::Index()
+    void
+    Workspace::ReadSettings()
     {
-      return rand() % NO_LETTERS;
+      QSettings settings;
+
+      const QByteArray geometry =
+          settings.value("geometry", QByteArray()).toByteArray();
+
+      if (geometry.isEmpty()) {
+        const QRect availableGeometry =
+            QApplication::desktop()->availableGeometry(this);
+        resize(availableGeometry.width() / 3, availableGeometry.height() / 2);
+        move((availableGeometry.width() - width()) / 2,
+             (availableGeometry.height() - height()) / 2);
+      } else {
+        restoreGeometry(geometry);
+      }
+
+      mStrict =
+          settings.value("strict", mStrict).toBool();
     }
 
-    SyllableType
-    Workspace::V(QString& result)
+    void
+    Workspace::WriteSettings()
     {
-      result += LETTER[mLanguage][Vowel][Index()];
-      return mLanguage == Kkree ?
-            After_V :
-            mLanguage == Vargr ||
-            mLanguage == Vilani ?
-              Alternate :
-              Basic;
-    }
-
-    SyllableType
-    Workspace::CV(QString& result)
-    {
-      result += LETTER[mLanguage][Initial][Index()];
-      V(result);
-      return mLanguage == Kkree ?
-            After_V :
-            mLanguage == Vargr ||
-            mLanguage == Vilani ?
-              Alternate :
-              Basic;
-    }
-
-    SyllableType
-    Workspace::VC(QString& result)
-    {
-      V(result);
-      result += LETTER[mLanguage][Final][Index()];
-      return mLanguage == Kkree ?
-            After_C :
-            mLanguage == Aslan ||
-            mLanguage == Darrian ||
-            mLanguage == Droyne ||
-            mLanguage == Vilani ||
-            mLanguage == Zhodani ?
-              Alternate :
-              Basic;
-    }
-
-    SyllableType
-    Workspace::CVC(QString& result)
-    {
-      CV(result);
-      result += LETTER[mLanguage][Final][Index()];
-      return mLanguage == Kkree ?
-            After_C :
-            mLanguage == Aslan ||
-            mLanguage == Darrian ||
-            mLanguage == Droyne ||
-            mLanguage == Vilani ||
-            mLanguage == Zhodani ?
-              Alternate :
-              Basic;
+      QSettings settings;
+      settings.setValue("geometry", saveGeometry());
+      settings.setValue("strict", mStrict);
     }
   };
 };

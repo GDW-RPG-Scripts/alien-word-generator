@@ -41,15 +41,16 @@ namespace GDW
 
       QCheckBox* checkbox =
           new QCheckBox(tr("Strict word generation") + ".", this);
-      checkbox->setChecked(settings.value("strictGeneration", true).toBool());
-      connect(checkbox, SIGNAL(stateChanged(int)), parent, SLOT(StrictGeneration(int)));
+      checkbox->setChecked(settings.value("strict", true).toBool());
+      connect(checkbox, &QCheckBox::stateChanged, parent, &Workspace::SetStrict);
 
       startBoxLayout->addWidget(checkbox);
       startBox->setLayout(startBoxLayout);
       dialogLayout->addWidget(startBox);
 
       //
-      QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok, this);
+      QDialogButtonBox* buttonBox =
+          new QDialogButtonBox(QDialogButtonBox::Ok, this);
       connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
       dialogLayout->addWidget(buttonBox);
 

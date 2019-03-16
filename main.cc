@@ -26,11 +26,19 @@
 #include <QCommandLineParser>
 #include <QCommandLineOption>
 #include <QLibraryInfo>
+#include <QTextStream>
 #include <QTranslator>
+
+int Usage(const char* message)
+{
+  QTextStream err(stderr);
+  err << "Usage: " << message << endl;
+  return -1;
+}
 
 int main(int argc, char* argv[])
 {
-  Q_INIT_RESOURCE(workspace);
+  Q_INIT_RESOURCE(AlienWordGenerator);
 
   QApplication application(argc, argv);
 
@@ -38,13 +46,27 @@ int main(int argc, char* argv[])
   QCoreApplication::setApplicationName("Alien Word Generator");
   QCoreApplication::setApplicationVersion("0");
 
+  // Command line parsing
   QCommandLineParser parser;
   parser.setApplicationDescription(QCoreApplication::applicationName());
   parser.addHelpOption();
   parser.addVersionOption();
-  parser.addPositionalArgument("file", "The file to open.");
+
+  QCommandLineOption
+      languageOption(QStringList() << "l" << "language",
+                  "Language of words to generate.");
+  parser.addOption(languageOption);
+
+  QCommandLineOption numberOptions("n", "Number of words.");
+  numberOptions.setDefaultValue("1");
+  parser.addOption(numberOptions);
+
+  QCommandLineOption strictOption("s", "Generate using strict mode.");
+  parser.addOption(strictOption);
+
   parser.process(application);
 
+  // I18N
   QTranslator qtTranslator;
   qtTranslator.load("qt_" + QLocale::system().name(),
                     QLibraryInfo::location(QLibraryInfo::TranslationsPath));
@@ -52,13 +74,36 @@ int main(int argc, char* argv[])
 
   QTranslator appTranslator;
   appTranslator.load(QLocale(), QLatin1String("AlienWordGenerator"),
-                       QLatin1String("_")); //, QLatin1String(":/translations"));
+                     QLatin1String("_")); //, QLatin1String(":/translations"));
   application.installTranslator(&appTranslator);
 
-  GDW::RPG::Workspace workspace;
-  workspace.show();
-  // if (!parser.positionalArguments().isEmpty())
-  //   workspace.LoadFile(parser.positionalArguments().first());
+  // Run application
+  if (parser.positionalArguments().isEmpty()) {
+    GDW::RPG::Workspace workspace;
+    workspace.show();
+    return application.exec();
+  } else {
+    bool valid;
 
-  return application.exec();
+    GDW::RPG::LanguageType languageType =
+        GDW::RPG::LanguageType(parser.value(languageOption).toInt(&valid));
+    if(!valid) {
+      return Usage("-l : Integer - Language to generate.");
+    }
+
+    bool strict = parser.isSet(strictOption);
+
+    int nWords = parser.value(numberOptions).toInt(&valid);
+    if(!valid) {
+      return Usage("-n : Integer - Number of words to generate.");
+    }
+
+    QTextStream out(stdout);
+    GDW::RPG::Language language(languageType, strict);
+    for (int i = 0; i < nWords; ++i) {
+      out << language.Generate() << endl;
+    }
+  }
+
+  return 0;
 }

@@ -23,6 +23,8 @@
 #ifndef WORKSPACE_HH
 #define WORKSPACE_HH
 
+#include "language.hh"
+
 #include "ui_workspace.h"
 
 #include <QMainWindow>
@@ -35,44 +37,6 @@ namespace GDW
 {
   namespace RPG
   {
-    class Workspace;
-
-    enum Language
-    {
-      Aslan,
-      Darrian,
-      Droyne,
-      Kkree,
-      Vargr,
-      Vilani,
-      Zhodani,
-      MAX_LANGS
-    };
-
-    enum Letter
-    {
-      Initial,
-      Vowel,
-      Final,
-      MAX_LETTERS
-    };
-
-    enum SyllableType
-    {
-      Basic,
-      Alternate,
-      After_C = Alternate,
-      After_V
-    };
-
-    enum Limits
-    {
-      NO_SYLLABLES = 36,
-      NO_LETTERS = 216
-    };
-
-    typedef std::function<SyllableType(Workspace&,QString&)> SyllableGenerator;
-
     class Workspace : public QMainWindow
     {
         Q_OBJECT
@@ -83,40 +47,31 @@ namespace GDW
 
         void LoadFile();
 
+      public slots:
+        void SetStrict(int);
+
       protected:
         void closeEvent(QCloseEvent* event) override;
 
       private slots:
-        void Copy();
-        void Fill();
-        QString Generate();
-        void ItemSelected(int);
-        void SetLanguage(int);
-
         void About();
         void ShowPreferences();
 
-        void StrictGeneration(int);
+        void Copy();
+        void Fill();
+        void ItemSelected(int);
+
+        void SetLanguage(int);
 
       private:
-        SyllableType   V(QString&);
-        SyllableType  CV(QString&);
-        SyllableType  VC(QString&);
-        SyllableType CVC(QString&);
-
-        int Index();
-
         void ReadSettings();
         void WriteSettings();
 
-      private:
-        int mMaxWords;
-        bool mStrictGeneration;
-        Language mLanguage;
-        Ui::Workspace mUi;
+        bool mStrict;
+        LanguageType mLanguage;
 
-        static const char* LETTER[MAX_LANGS][MAX_LETTERS][NO_LETTERS];
-        static const SyllableGenerator LANGUAGE[MAX_LANGS][MAX_LETTERS][NO_SYLLABLES];
+        int mMaxWords;
+        Ui::Workspace mUi;
     };
   };
 };
