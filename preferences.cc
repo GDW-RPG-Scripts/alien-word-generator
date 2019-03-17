@@ -37,14 +37,29 @@ namespace GDW
 
       //
       QGroupBox* startBox = new QGroupBox(tr("Generation settings") + ":", this);
-      QVBoxLayout* startBoxLayout = new QVBoxLayout;
+      QVBoxLayout* startBoxLayout = new QVBoxLayout(startBox);
 
       QCheckBox* checkbox =
-          new QCheckBox(tr("Strict word generation") + ".", this);
-      checkbox->setChecked(settings.value("strict", true).toBool());
+          new QCheckBox(tr("Strict rules word generation") + ".", this);
+      checkbox->setChecked(settings.value("strict", parent->GetStrict()).toBool());
       connect(checkbox, &QCheckBox::stateChanged, parent, &Workspace::SetStrict);
-
       startBoxLayout->addWidget(checkbox);
+
+      //
+      QWidget* widget = new QWidget(this);
+      QFormLayout* formLayout = new QFormLayout(widget);
+      // formLayout->setFormAlignment(Qt::AlignLeft);
+      formLayout->setMargin(0);
+
+      //
+      QLineEdit* batchSizeLineEdit =
+          new QLineEdit(settings.value("batchSize", parent->GetBatchSize()).toString(), this);
+      // batchSizeLineEdit->setInputMask("D0000");
+      batchSizeLineEdit->setValidator(new QIntValidator(1, USHRT_MAX));
+      connect(batchSizeLineEdit, &QLineEdit::textChanged, parent, &Workspace::SetBatchSize);
+      formLayout->addRow(tr("&Number of names to generate") + ":", batchSizeLineEdit);
+      widget->setLayout(formLayout);
+      startBoxLayout->addWidget(widget);
       startBox->setLayout(startBoxLayout);
       dialogLayout->addWidget(startBox);
 

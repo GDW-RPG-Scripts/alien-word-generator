@@ -47,8 +47,12 @@ namespace GDW
 
         void LoadFile();
 
+        bool GetStrict() const;
+        int GetBatchSize() const;
+
       public slots:
         void SetStrict(int);
+        void SetBatchSize(const QString&);
 
       protected:
         void closeEvent(QCloseEvent* event) override;
@@ -67,10 +71,10 @@ namespace GDW
         void ReadSettings();
         void WriteSettings();
 
-        bool mStrict;
         LanguageType mLanguage;
 
-        int mMaxWords;
+        bool mStrict;
+        int mBatchSize;
         Ui::Workspace mUi;
     };
   };

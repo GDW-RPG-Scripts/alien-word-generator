@@ -39,7 +39,7 @@ namespace GDW
   namespace RPG
   {
     Workspace::Workspace(QWidget *parent) :
-      QMainWindow(parent), mStrict(false), mMaxWords(20)
+      QMainWindow(parent), mStrict(false), mBatchSize(20)
     {
       ReadSettings();
 
@@ -108,10 +108,34 @@ namespace GDW
       dialog.exec();
     }
 
+    int
+    Workspace::GetBatchSize() const
+    {
+      return mBatchSize;
+    }
+
+    void
+    Workspace::SetBatchSize(const QString& batchSize)
+    {
+      bool valid;
+      int newValue = batchSize.toInt(&valid);
+      if(valid) {
+        QSettings settings;
+        settings.setValue("batchSize", mBatchSize = newValue);
+      }
+    }
+
+    bool
+    Workspace::GetStrict() const
+    {
+      return mStrict;
+    }
+
     void
     Workspace::SetStrict(int state)
     {
-      mStrict = state > 0;
+      QSettings settings;
+      settings.setValue("strict", mStrict = state > 0);
     }
 
     void
@@ -128,7 +152,7 @@ namespace GDW
     {
       Language word(mLanguage, mStrict);
 
-      for (int i = 0; i < mMaxWords; ++i) {
+      for (int i = 0; i < mBatchSize; ++i) {
         QString result = word.Generate();
         result[0] = result[0].toUpper();
         new QListWidgetItem(result, mUi.listWidget);
@@ -159,6 +183,9 @@ namespace GDW
         restoreGeometry(geometry);
       }
 
+      mBatchSize =
+          settings.value("batchSize", mBatchSize).toBool();
+
       mStrict =
           settings.value("strict", mStrict).toBool();
     }
@@ -168,6 +195,7 @@ namespace GDW
     {
       QSettings settings;
       settings.setValue("geometry", saveGeometry());
+      settings.setValue("batchSize", mBatchSize);
       settings.setValue("strict", mStrict);
     }
   };
