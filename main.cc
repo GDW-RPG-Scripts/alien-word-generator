@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
 
   QApplication application(argc, argv);
 
-  QCoreApplication::setOrganizationName("");
+  QCoreApplication::setOrganizationName("GDW RPG");
   QCoreApplication::setApplicationName("Alien Word Generator");
   QCoreApplication::setApplicationVersion("0");
 

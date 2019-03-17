@@ -29,8 +29,8 @@ namespace GDW
 {
   namespace RPG
   {
-    Preferences::Preferences(Workspace* parent)
-      : QDialog(parent)
+    Preferences::Preferences(Workspace* workspace)
+      : QDialog(workspace)
     {
       QSettings settings;
       QVBoxLayout* dialogLayout = new QVBoxLayout;
@@ -39,29 +39,38 @@ namespace GDW
       QGroupBox* startBox = new QGroupBox(tr("Generation settings") + ":", this);
       QVBoxLayout* startBoxLayout = new QVBoxLayout(startBox);
 
-      QCheckBox* checkbox =
-          new QCheckBox(tr("Strict rules word generation") + ".", this);
-      checkbox->setChecked(settings.value("strict", parent->GetStrict()).toBool());
-      connect(checkbox, &QCheckBox::stateChanged, parent, &Workspace::SetStrict);
-      startBoxLayout->addWidget(checkbox);
+      QCheckBox* strictCheckBox =
+          new QCheckBox(tr("Strict rules word generation") + ".", startBox);
+      strictCheckBox->setChecked(workspace->Strict());
+      connect(strictCheckBox, &QCheckBox::stateChanged, workspace, &Workspace::SetStrict);
+      startBoxLayout->addWidget(strictCheckBox);
 
       //
       QWidget* widget = new QWidget(this);
       QFormLayout* formLayout = new QFormLayout(widget);
-      // formLayout->setFormAlignment(Qt::AlignLeft);
       formLayout->setMargin(0);
 
-      //
       QLineEdit* batchSizeLineEdit =
-          new QLineEdit(settings.value("batchSize", parent->GetBatchSize()).toString(), this);
-      // batchSizeLineEdit->setInputMask("D0000");
+          new QLineEdit(QString::number(workspace->GetBatchSize()), this);
       batchSizeLineEdit->setValidator(new QIntValidator(1, USHRT_MAX));
-      connect(batchSizeLineEdit, &QLineEdit::textChanged, parent, &Workspace::SetBatchSize);
+      connect(batchSizeLineEdit, &QLineEdit::textChanged, workspace, &Workspace::SetBatchSize);
       formLayout->addRow(tr("&Number of names to generate") + ":", batchSizeLineEdit);
       widget->setLayout(formLayout);
       startBoxLayout->addWidget(widget);
+
       startBox->setLayout(startBoxLayout);
       dialogLayout->addWidget(startBox);
+
+      //
+      QGroupBox* fileBox = new QGroupBox(tr("File-handling settings") + ":", this);
+      QVBoxLayout* fileBoxLayout = new QVBoxLayout(fileBox);
+      QCheckBox* saveCheckBox =
+          new QCheckBox(tr("Check for save on exit") + ".", fileBox);
+      saveCheckBox->setChecked(workspace->SaveOnExit());
+      connect(saveCheckBox, &QCheckBox::stateChanged, workspace, &Workspace::SetSaveOnExit);
+      fileBoxLayout->addWidget(saveCheckBox);
+      fileBox->setLayout(fileBoxLayout);
+      dialogLayout->addWidget(fileBox);
 
       //
       QDialogButtonBox* buttonBox =

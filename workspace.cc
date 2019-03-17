@@ -27,6 +27,7 @@
 #include <QCloseEvent>
 #include <QDesktopWidget>
 #include <QDebug>
+#include <QFileDialog>
 #include <QListWidgetItem>
 #include <QMessageBox>
 #include <QSettings>
@@ -38,14 +39,15 @@ namespace GDW
 {
   namespace RPG
   {
-    Workspace::Workspace(QWidget *parent) :
-      QMainWindow(parent), mStrict(false), mBatchSize(20)
+    Workspace::Workspace(QWidget* parent)
+      : QMainWindow(parent), mClean(true),
+        mStrict(false), mBatchSize(20), mSaveOnExit(false)
     {
       ReadSettings();
 
-      srand(time(NULL));
-
       mUi.setupUi(this);
+
+      srand(time(NULL));
 
       setUnifiedTitleAndToolBarOnMac(true);
     }
@@ -56,10 +58,12 @@ namespace GDW
     //
     // Events
     //
-    void Workspace::closeEvent(QCloseEvent* event)
+    void
+    Workspace::closeEvent(QCloseEvent* event)
     {
-      if (true /*MaybeSave()*/) {
-        WriteSettings();
+      WriteSettings();
+
+      if(MaybeSave()) {
         event->accept();
       } else {
         event->ignore();
@@ -69,6 +73,64 @@ namespace GDW
     //
     // Slots
     //
+    void
+    Workspace::New()
+    {
+      if (MaybeSave()) {
+        mUi.listWidget->clear();
+        SetCurrentFile(QString());
+      }
+    }
+
+    void
+    Workspace::Open()
+    {
+      if (MaybeSave()) {
+        QString fileName =
+            QFileDialog::getOpenFileName(this,
+                                         tr("Load Words"),
+                                         ".",
+                                         tr("GDW RPG Word files (*.grw *.txt)"));
+        if (!fileName.isEmpty())
+          LoadFile(fileName);
+      }
+    }
+
+    bool
+    Workspace::Save()
+    {
+      if (mCurrentFile.isEmpty()) {
+        return SaveAs();
+      } else {
+        return SaveFile(mCurrentFile);
+      }
+    }
+
+    bool
+    Workspace::SaveAs()
+    {
+      QString fileName =
+          QFileDialog::getSaveFileName(this, tr("Save Words"),
+                                       tr("Untitled"),
+                                       tr("GDW RPG Word files (*.grw);; Text files (*.txt)"));
+
+      if(fileName.isEmpty())
+        return false;
+
+      return SaveFile(fileName);
+    }
+
+    void
+    Workspace::SetCurrentFile(const QString& fileName)
+    {
+      QFileInfo info(mCurrentFile = fileName);
+      QString title(info.fileName());
+      title += info.fileName().isEmpty() ? "" : " - ";
+      setWindowTitle(title +
+                     QCoreApplication::organizationName() + " " +
+                     QCoreApplication::applicationName());
+    }
+
     void
     Workspace::SetLanguage(int language)
     {
@@ -120,13 +182,15 @@ namespace GDW
       bool valid;
       int newValue = batchSize.toInt(&valid);
       if(valid) {
+        mBatchSize = newValue;
+
         QSettings settings;
-        settings.setValue("batchSize", mBatchSize = newValue);
+        settings.setValue("batchSize", mBatchSize);
       }
     }
 
     bool
-    Workspace::GetStrict() const
+    Workspace::Strict() const
     {
       return mStrict;
     }
@@ -134,8 +198,25 @@ namespace GDW
     void
     Workspace::SetStrict(int state)
     {
+      mStrict = state > 0;
+
       QSettings settings;
-      settings.setValue("strict", mStrict = state > 0);
+      settings.setValue("strict", mStrict);
+    }
+
+    bool
+    Workspace::SaveOnExit() const
+    {
+      return mSaveOnExit;
+    }
+
+    void
+    Workspace::SetSaveOnExit(int state)
+    {
+      mSaveOnExit = state > 0;
+
+      QSettings settings;
+      settings.setValue("saveOnExit", mSaveOnExit);
     }
 
     void
@@ -157,12 +238,109 @@ namespace GDW
         result[0] = result[0].toUpper();
         new QListWidgetItem(result, mUi.listWidget);
       }
+
+      mClean = false;
     }
 
     void
     Workspace::ItemSelected(int)
     {
       mUi.actionCopy->setEnabled(true);
+    }
+
+    bool
+    Workspace::MaybeSave()
+    {
+      if(mClean || !SaveOnExit() || mUi.listWidget->count() <= 0) {
+        return true;
+      }
+
+      const QMessageBox::StandardButton ret
+          = QMessageBox::warning(this,
+                                 QCoreApplication::organizationName() + " " +
+                                 QCoreApplication::applicationName(),
+                                 tr("Words have been generated.\n"
+                                    "Do you want to save them?"),
+                                 QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+      switch (ret) {
+        case QMessageBox::Save:
+          return Save();
+        case QMessageBox::Cancel:
+          return false;
+        default:
+          break;
+      }
+
+      return true;
+    }
+
+    void
+    Workspace::LoadFile(const QString& fileName)
+    {
+      QFile file(fileName);
+      if (!file.open(QFile::ReadOnly | QFile::Text)) {
+        QString message =
+            tr("Cannot read file %1:\n%2.").arg(QDir::toNativeSeparators(fileName),
+                                                file.errorString());
+        QMessageBox::warning(this,
+                             QCoreApplication::organizationName() + " " +
+                             QCoreApplication::applicationName(),
+                             message);
+        return;
+      }
+
+#ifndef QT_NO_CURSOR
+      QApplication::setOverrideCursor(Qt::WaitCursor);
+#endif
+
+      QTextStream in(&file);
+      QString word;
+      while(in.readLineInto(&word))
+        mUi.listWidget->addItem(word);
+
+      file.close();
+
+#ifndef QT_NO_CURSOR
+      QApplication::restoreOverrideCursor();
+#endif
+
+      SetCurrentFile(fileName);
+      // UpdateActions();
+      statusBar()->showMessage(tr("Words loaded"), 5000);
+    }
+
+    bool
+    Workspace::SaveFile(const QString& fileName)
+    {
+      QFile file(fileName);
+      if (!file.open(QFile::WriteOnly | QFile::Text)) {
+        QMessageBox::warning(this,
+                             QCoreApplication::organizationName() + " " +
+                             QCoreApplication::applicationName(),
+                             tr("Cannot write file %1:\n%2.")
+                             .arg(QDir::toNativeSeparators(fileName),
+                                  file.errorString()));
+        return false;
+      }
+
+      QTextStream out(&file);
+
+#ifndef QT_NO_CURSOR
+      QApplication::setOverrideCursor(Qt::WaitCursor);
+#endif
+
+      for (int i = 0; i < mUi.listWidget->count(); ++i) {
+        out << mUi.listWidget->item(i)->text() << endl;
+      }
+
+#ifndef QT_NO_CURSOR
+      QApplication::restoreOverrideCursor();
+#endif
+
+      mClean = true;
+      SetCurrentFile(fileName);
+      statusBar()->showMessage(tr("Words saved"), 5000);
+      return true;
     }
 
     void
@@ -184,7 +362,10 @@ namespace GDW
       }
 
       mBatchSize =
-          settings.value("batchSize", mBatchSize).toBool();
+          settings.value("batchSize", mBatchSize).toInt();
+
+      mSaveOnExit =
+          settings.value("saveOnExit", mSaveOnExit).toBool();
 
       mStrict =
           settings.value("strict", mStrict).toBool();
@@ -196,6 +377,7 @@ namespace GDW
       QSettings settings;
       settings.setValue("geometry", saveGeometry());
       settings.setValue("batchSize", mBatchSize);
+      settings.setValue("saveOnExit", mSaveOnExit);
       settings.setValue("strict", mStrict);
     }
   };

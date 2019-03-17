@@ -45,20 +45,26 @@ namespace GDW
         explicit Workspace(QWidget *parent = nullptr);
         ~Workspace();
 
-        void LoadFile();
+        void LoadFile(const QString&);
 
-        bool GetStrict() const;
+        bool Strict() const;
         int GetBatchSize() const;
+        bool SaveOnExit() const;
 
       public slots:
         void SetStrict(int);
         void SetBatchSize(const QString&);
+        void SetSaveOnExit(int);
 
       protected:
         void closeEvent(QCloseEvent* event) override;
 
       private slots:
         void About();
+        void New();
+        void Open();
+        bool Save();
+        bool SaveAs();
         void ShowPreferences();
 
         void Copy();
@@ -68,13 +74,21 @@ namespace GDW
         void SetLanguage(int);
 
       private:
+        bool MaybeSave();
+        bool SaveFile(const QString&);
+        void SetCurrentFile(const QString&);
+
         void ReadSettings();
         void WriteSettings();
 
+        bool mClean;
+        QString mCurrentFile;
         LanguageType mLanguage;
 
         bool mStrict;
         int mBatchSize;
+        bool mSaveOnExit;
+
         Ui::Workspace mUi;
     };
   };
