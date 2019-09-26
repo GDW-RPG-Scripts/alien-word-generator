@@ -22,7 +22,7 @@
 #
 # ------------------------------------------------------------------------------
 
-QT       += core gui
+QT       += core
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -69,14 +69,7 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-macx {
-    QMAKE_POST_LINK = $$(QTDIR)/bin/macdeployqt \"$$OUT_PWD/$${TARGET}.app\"
-}
-
-win32 {
-  CONFIG(debug, debug|release) {
-    QMAKE_POST_LINK = $$(QTDIR)/bin/windeployqt $$OUT_PWD/../../HelloDebug
-  } else {
-    QMAKE_POST_LINK = $$(QTDIR)/bin/windeployqt $$OUT_PWD/../../HelloRelease
-  }
+CONFIG(release, release|debug) {
+  macx: QMAKE_POST_LINK = $$(QTDIR)/bin/macdeployqt \"$$OUT_PWD/$${TARGET}.app\"
+  win32: QMAKE_POST_LINK = $$(QTDIR)/bin/windeployqt \"$$OUT_PWD/$${TARGET}\"
 }

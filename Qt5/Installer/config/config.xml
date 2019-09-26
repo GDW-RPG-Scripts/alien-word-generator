@@ -5,6 +5,7 @@
     <Title>Alien Word Generator 1.2</Title>
     <Publisher>Mike Henry Publishing</Publisher>
     <ProductUrl>https://github.com/GDW-RPG-Scripts/alien-word-generator</ProductUrl>
+    <InstallerApplicationIcon>sunburst</InstallerApplicationIcon>
     <StartMenuDir>GDW RPG Tools</StartMenuDir>
     <TargetDir>@ApplicationsDir@</TargetDir>
 </Installer>

@@ -5,11 +5,10 @@
     <Version>1.2</Version>
     <ReleaseDate>2019-09-25</ReleaseDate>
     <Licenses>
-        <License name="GNU General Public License, Version 3" file="license.txt" />
+        <License name="GNU General Public License, Version 3" file="LICENSE" />
     </Licenses>
     <ForcedInstallation>true</ForcedInstallation>
-    <Default>script</Default>
-    <Script>installscript.qs</Script>
+    <Default>true</Default>
     <UserInterfaces>
         <UserInterface>page.ui</UserInterface>
     </UserInterfaces>

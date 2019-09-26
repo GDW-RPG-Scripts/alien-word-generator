@@ -26,19 +26,40 @@ TEMPLATE = aux
 
 INSTALLER = "Alien Word Generator Installer"
 
-INPUT = $$PWD/config/config.xml $$PWD/packages
-installer.input = INPUT
-installer.output = $$INSTALLER
-installer.commands = /opt/Qt/QtIFW-3.1.1/bin/binarycreator --offline-only -c $$PWD/config/config.xml -p $$PWD/packages ${QMAKE_FILE_OUT}
-installer.CONFIG += target_predeps no_link combine
-
-QMAKE_EXTRA_COMPILERS += installer
-
 FORMS += \
-  packages/meta/page.ui
+  packages/meta/page.ui \
+  packages/se.mikehenry.awg/meta/page.ui
 
 DISTFILES += \
   packages/data/installcontent.txt \
   packages/meta/installscript.qs \
   packages/meta/license.txt \
-  packages/meta/package.xml
+  packages/meta/package.xml \
+  packages/se.mikehenry.awg/meta/LICENSE \
+  packages/se.mikehenry.awg/meta/package.xml
+
+CONFIG(release, release|debug) {
+
+    macx: APP_NAME = Alien Word Generator.app
+
+    APP_DATA = $$PWD/packages/se.mikehenry.awg/data
+    APP_PWD = $$OUT_PWD/../Application/$$APP_NAME
+
+    cleandata.commands = $$QMAKE_DEL_TREE \"$$APP_DATA/$$APP_NAME\"
+    copydata.commands = $$QMAKE_COPY_DIR \"$$APP_PWD\" \"$$APP_DATA\"
+    copydata.depends = cleandata
+    first.depends = $(first) copydata
+    export(first.depends)
+    export(copydata.commands)
+    export(cleandata.commands)
+    QMAKE_EXTRA_TARGETS += first copydata cleandata
+
+    INPUT = $$PWD/config/config.xml $$PWD/packages
+    installer.depends = copydata
+    installer.input = INPUT
+    installer.output = \"$$INSTALLER\"
+    installer.commands = /opt/Qt/QtIFW-3.1.1/bin/binarycreator --offline-only -c $$PWD/config/config.xml -p $$PWD/packages ${QMAKE_FILE_OUT}
+    installer.CONFIG += target_predeps no_link combine
+
+    QMAKE_EXTRA_COMPILERS += installer
+}
