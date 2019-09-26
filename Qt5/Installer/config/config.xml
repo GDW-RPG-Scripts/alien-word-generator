@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Installer>
+    <Name>Alien Word Generator</Name>
+    <Version>1.2</Version>
+    <Title>Alien Word Generator 1.2</Title>
+    <Publisher>Mike Henry Publishing</Publisher>
+    <ProductUrl>https://github.com/GDW-RPG-Scripts/alien-word-generator</ProductUrl>
+    <StartMenuDir>GDW RPG Tools</StartMenuDir>
+    <TargetDir>@ApplicationsDir@</TargetDir>
+</Installer>

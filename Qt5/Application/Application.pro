@@ -1,23 +1,24 @@
 # ------------------------------------------------------------------------------
 #
-# GDW RPG Vehicles, a vehicle database for Traveller and other GDW derived RPGs.
+# Alien Word Generator, a word generator for Traveller and other GDW derived
+# RPGs.
 #
 # Copyright (C) 2018-2019 Michael N. Henry <mike.henry@mikehenry.se>
 #
-# This file is part of GDW RPG Vehicles.
+# This file is part of Alien Word Generator.
 #
-# GDW RPG Vehicles is free software: you can redistribute it and/or modify it
+# Alien Word Generator is free software: you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by the Free
 # Software Foundation, either version 2 of the License, or (at your option) any
 # later version.
 #
-# GDW RPG Vehicles is distributed in the hope that it will be useful, but
+# Alien Word Generator is distributed in the hope that it will be useful, but
 # WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 # FITNESS FOR A PARTICULAR PURPOSE.
 #
 # See the GNU General Public License for more details. You should have received
-# a copy of the GNU General Public License along with GDW RPG Vehicles. If not,
-# see <http://www.gnu.org/licenses/>.
+# a copy of the GNU General Public License along with Alien Word Generator. If
+# not, see <http://www.gnu.org/licenses/>.
 #
 # ------------------------------------------------------------------------------
 
@@ -27,6 +28,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = "Alien Word Generator"
 TEMPLATE = app
+VERSION = 1.2
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
@@ -66,3 +68,15 @@ ICON = icons/sunburst.icns
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+macx {
+    QMAKE_POST_LINK = $$(QTDIR)/bin/macdeployqt \"$$OUT_PWD/$${TARGET}.app\"
+}
+
+win32 {
+  CONFIG(debug, debug|release) {
+    QMAKE_POST_LINK = $$(QTDIR)/bin/windeployqt $$OUT_PWD/../../HelloDebug
+  } else {
+    QMAKE_POST_LINK = $$(QTDIR)/bin/windeployqt $$OUT_PWD/../../HelloRelease
+  }
+}

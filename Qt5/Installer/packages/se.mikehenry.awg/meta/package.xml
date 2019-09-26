@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package>
+    <DisplayName>Alien Word Generator</DisplayName>
+    <Description>Install the Alien Word Generator application.</Description>
+    <Version>1.2</Version>
+    <ReleaseDate>2019-09-25</ReleaseDate>
+    <Licenses>
+        <License name="GNU General Public License, Version 3" file="license.txt" />
+    </Licenses>
+    <ForcedInstallation>true</ForcedInstallation>
+    <Default>script</Default>
+    <Script>installscript.qs</Script>
+    <UserInterfaces>
+        <UserInterface>page.ui</UserInterface>
+    </UserInterfaces>
+</Package>
