@@ -38,7 +38,12 @@ CONFIG(release, release|debug) {
     macx {
         APP_NAME = Alien Word Generator.app
         APP_PWD = $$OUT_PWD/../Application/$$APP_NAME
+        cleandata.commands = test ! -e \"$$APP_DATA/$$APP_NAME\" || $$QMAKE_DEL_TREE \"$$APP_DATA/$$APP_NAME\"
         copydata.commands = $$QMAKE_COPY_DIR \"$$APP_PWD\" \"$$APP_DATA\"
+        copydata.depends = cleandata
+        export(cleandata.commands)
+        export(copydata.depends)
+        QMAKE_EXTRA_TARGETS += cleandata
     }
 
     win32 {
