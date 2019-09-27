@@ -61,7 +61,8 @@ FORMS += \
 RESOURCES += \
     AlienWordGenerator.qrc
 
-ICON = icons/sunburst.icns
+macx: ICON = icons/sunburst.icns
+win32: RC_ICONS = icons/sunburst.ico
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -70,5 +71,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 CONFIG(release, release|debug) {
   macx: QMAKE_POST_LINK = $$(QTDIR)/bin/macdeployqt \"$$OUT_PWD/$${TARGET}.app\"
-  win32: QMAKE_POST_LINK = $$(QTDIR)/bin/windeployqt \"$$OUT_PWD/$${TARGET}\"
+  win32: QMAKE_POST_LINK = $$(QTDIR)/bin/windeployqt \"$$OUT_PWD/release/$${TARGET}.exe\"
 }

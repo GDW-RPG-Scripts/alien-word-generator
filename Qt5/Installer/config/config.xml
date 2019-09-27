@@ -32,6 +32,7 @@
     <TargetDir>@ApplicationsDir@/GDW RPG Tools</TargetDir>
     <Background>watermark.png</Background>
     <Watermark>watermark.png</Watermark>
+    <WizardStyle>Classic</WizardStyle>
     <SupportsModify>false</SupportsModify>
     <InstallActionColumnVisible>true</InstallActionColumnVisible>
 </Installer>

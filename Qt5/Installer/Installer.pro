@@ -24,47 +24,39 @@
 
 TEMPLATE = aux
 
-INSTALLER = "Alien_Word_Generator_Installer"
-
-FORMS += \
-  packages/meta/page.ui
+INSTALLER = "Alien Word Generator Installer"
 
 DISTFILES += \
-  config/watermark.png \
-  config/watermark.png \
-  icons/watermark.png \
-  packages/data/installcontent.txt \
-  packages/meta/installscript.qs \
-  packages/meta/license.txt \
-  packages/meta/package.xml \
   packages/se.mikehenry.awg/meta/LICENSE \
   packages/se.mikehenry.awg/meta/package.xml \
-  resources/watermark.png \
-  watermark.png \
-  watermark.png \
   watermark.png
 
 CONFIG(release, release|debug) {
 
-    macx: APP_NAME = Alien Word Generator.app
-
     APP_DATA = $$PWD/packages/se.mikehenry.awg/data
-    APP_PWD = $$OUT_PWD/../Application/$$APP_NAME
 
-    cleandata.commands = $$QMAKE_DEL_TREE \"$$APP_DATA/$$APP_NAME\"
-    copydata.commands = $$QMAKE_COPY_DIR \"$$APP_PWD\" \"$$APP_DATA\"
-    copydata.depends = cleandata
-    first.depends = $(first) copydata
-    export(first.depends)
+    macx {
+        APP_NAME = Alien Word Generator.app
+        APP_PWD = $$OUT_PWD/../Application/$$APP_NAME
+        copydata.commands = $$QMAKE_COPY_DIR \"$$APP_PWD\" \"$$APP_DATA\"
+    }
+
+    win32 {
+        APP_NAME = Alien Word Generator.exe
+        APP_PWD = $$OUT_PWD/../Application/release
+        copydata.commands = C:/Qt/QtIFW-3.1.1/bin/archivegen \"$$APP_DATA/application.7z\" \"$$APP_PWD/$$APP_NAME\" \"$$APP_PWD/*.dll\" \"$$APP_PWD/iconengines\" \"$$APP_PWD/imageformats\" \"$$APP_PWD/platforms\" \"$$APP_PWD/styles\" \"$$APP_PWD/translations\"
+    }
+
     export(copydata.commands)
-    export(cleandata.commands)
-    QMAKE_EXTRA_TARGETS += first copydata cleandata
+
+    QMAKE_EXTRA_TARGETS += first copydata
 
     INPUT = $$PWD/config/config.xml $$PWD/packages
     installer.depends = copydata
     installer.input = INPUT
     installer.output = \"$$INSTALLER\"
-    installer.commands = /opt/Qt/QtIFW-3.1.1/bin/binarycreator --offline-only -c $$PWD/config/config.xml -p $$PWD/packages ${QMAKE_FILE_OUT}
+    macx: installer.commands = /opt/Qt/QtIFW-3.1.1/bin/binarycreator --offline-only -c $$PWD/config/config.xml -p $$PWD/packages ${QMAKE_FILE_OUT}
+    win32: installer.commands = C:/Qt/QtIFW-3.1.1/bin/binarycreator --offline-only -c $$PWD/config/config.xml -p $$PWD/packages ${QMAKE_FILE_OUT}
     installer.CONFIG += target_predeps no_link combine
 
     QMAKE_EXTRA_COMPILERS += installer
