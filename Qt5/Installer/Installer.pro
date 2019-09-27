@@ -24,18 +24,25 @@
 
 TEMPLATE = aux
 
-INSTALLER = "Alien Word Generator Installer"
+INSTALLER = "Alien_Word_Generator_Installer"
 
 FORMS += \
   packages/meta/page.ui
 
 DISTFILES += \
+  config/watermark.png \
+  config/watermark.png \
+  icons/watermark.png \
   packages/data/installcontent.txt \
   packages/meta/installscript.qs \
   packages/meta/license.txt \
   packages/meta/package.xml \
   packages/se.mikehenry.awg/meta/LICENSE \
-  packages/se.mikehenry.awg/meta/package.xml
+  packages/se.mikehenry.awg/meta/package.xml \
+  resources/watermark.png \
+  watermark.png \
+  watermark.png \
+  watermark.png
 
 CONFIG(release, release|debug) {
 
