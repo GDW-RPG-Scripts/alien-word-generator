@@ -28,7 +28,6 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = "Alien Word Generator"
 TEMPLATE = app
-VERSION = 1.2
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings

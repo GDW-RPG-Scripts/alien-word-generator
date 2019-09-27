@@ -27,8 +27,7 @@ TEMPLATE = aux
 INSTALLER = "Alien Word Generator Installer"
 
 FORMS += \
-  packages/meta/page.ui \
-  packages/se.mikehenry.awg/meta/page.ui
+  packages/meta/page.ui
 
 DISTFILES += \
   packages/data/installcontent.txt \
