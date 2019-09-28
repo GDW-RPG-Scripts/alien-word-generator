@@ -26,13 +26,16 @@
     <Title>Alien Word Generator 1.2</Title>
     <Publisher>Mike Henry Publishing</Publisher>
     <ProductUrl>https://github.com/GDW-RPG-Scripts/alien-word-generator</ProductUrl>
-    <InstallerApplicationIcon>icons/sunburst</InstallerApplicationIcon>
-    <InstallerWindowIcon>icons/sunburst</InstallerWindowIcon>
+    <!--InstallerApplicationIcon>:/appicon</InstallerApplicationIcon-->
+    <!--InstallerWindowIcon>:/windowicon</InstallerWindowIcon-->
+    <Logo>:/logo</Logo>
+    <!--Watermark>:/watermark</Watermark-->
+    <Banner>:/banner</Banner>
+    <!--Background>:/watermark</Background-->
+    <WizardStyle>Modern</WizardStyle>
+    <TitleColor>#d9d900</TitleColor>
     <StartMenuDir>GDW RPG Tools</StartMenuDir>
     <TargetDir>@ApplicationsDir@/GDW RPG Tools</TargetDir>
-    <Background>watermark.png</Background>
-    <Watermark>watermark.png</Watermark>
-    <WizardStyle>Modern</WizardStyle>
-    <SupportsModify>false</SupportsModify>
     <InstallActionColumnVisible>true</InstallActionColumnVisible>
+    <SupportsModify>false</SupportsModify>
 </Installer>

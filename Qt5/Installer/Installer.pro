@@ -27,9 +27,14 @@ TEMPLATE = aux
 INSTALLER = "Alien Word Generator Installer"
 
 DISTFILES += \
+  icons/sunburst.icns \
+  icons/sunburst.ico \
+  icons/sunburst.png \
   packages/se.mikehenry.awg/meta/LICENSE \
-  packages/se.mikehenry.awg/meta/package.xml \
-  watermark.png
+  packages/se.mikehenry.awg/meta/package.xml
+
+RESOURCES += \
+  installer.qrc
 
 CONFIG(release, release|debug) {
 
@@ -60,8 +65,8 @@ CONFIG(release, release|debug) {
     installer.depends = copydata
     installer.input = INPUT
     installer.output = \"$$INSTALLER\"
-    macx: installer.commands = /opt/Qt/QtIFW-3.1.1/bin/binarycreator --offline-only -c $$PWD/config/config.xml -p $$PWD/packages ${QMAKE_FILE_OUT}
-    win32: installer.commands = C:/Qt/QtIFW-3.1.1/bin/binarycreator --offline-only -c $$PWD/config/config.xml -p $$PWD/packages ${QMAKE_FILE_OUT}
+    macx: installer.commands = /opt/Qt/QtIFW-3.1.1/bin/binarycreator -f -c $$PWD/config/config.xml -p $$PWD/packages -r $$PWD/installer.qrc ${QMAKE_FILE_OUT}
+    win32: installer.commands = C:/Qt/QtIFW-3.1.1/bin/binarycreator -f -c $$PWD/config/config.xml -p $$PWD/packages -r $$PWD/installer.qrc ${QMAKE_FILE_OUT}
     installer.CONFIG += target_predeps no_link combine
 
     QMAKE_EXTRA_COMPILERS += installer
